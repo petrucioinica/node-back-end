@@ -5,6 +5,11 @@ module.exports = (sequelize) => {
 		static associate(models) {
 			Route.belongsTo(models.Location, { foreignKey: "destinationId" });
 			Route.belongsTo(models.Location, { foreignKey: "departureId" });
+			Route.belongsTo(models.Company, { foreignKey: "companyId" });
+			Route.belongsToMany(models.User, {
+				through: models.Review,
+				foreignKey: "reviewId",
+			});
 		}
 	}
 

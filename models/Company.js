@@ -1,31 +1,19 @@
 const { DataTypes, Model, Sequelize } = require("sequelize");
 
 module.exports = (sequelize) => {
-	class User extends Model {
+	class Company extends Model {
 		static associate(models) {
-			User.belongsToMany(models.Route, {
-				foreignKey: "userId",
-				through: models.Review,
-			});
+			Company.hasMany(models.Route, { foreignKey: "companyId" });
 		}
 	}
 
-	User.init(
+	Company.init(
 		{
 			id: {
 				type: DataTypes.UUID,
 				allowNull: false,
 				defaultValue: Sequelize.UUIDV4,
 				primaryKey: true,
-			},
-
-			password: {
-				type: DataTypes.STRING,
-				allowNull: false,
-			},
-			email: {
-				type: DataTypes.STRING,
-				allowNull: false,
 			},
 			name: {
 				type: DataTypes.STRING,
@@ -34,5 +22,5 @@ module.exports = (sequelize) => {
 		},
 		{ sequelize }
 	);
-	return User;
+	return Company;
 };

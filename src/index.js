@@ -7,9 +7,7 @@ console.log("port is ", port);
 
 //sequelize
 const db = require("../models/index.js");
-db.sequelize.sync();
-
-console.log(process.env.DB_PASSWORD);
+db.sequelize.sync({ alter: true });
 
 const app = express();
 

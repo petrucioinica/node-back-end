@@ -4,8 +4,6 @@ module.exports = (sequelize) => {
 	class Location extends Model {
 		static associate(models) {
 			Location.hasMany(models.Route, { foreignKey: "destinationId" });
-			Location.hasMany(models.Route, { foreignKey: "departureId" });
-			// define association here
 		}
 	}
 
