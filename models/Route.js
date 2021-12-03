@@ -2,7 +2,10 @@ const { DataTypes, Model, Sequelize } = require("sequelize");
 
 module.exports = (sequelize) => {
 	class Route extends Model {
-		static associate(models) {}
+		static associate(models) {
+			models.Route.hasOne(models.Location, { as: "destination" });
+			models.Route.hasOne(models.Location, { as: "departure" });
+		}
 	}
 
 	Route.init(

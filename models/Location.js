@@ -3,8 +3,6 @@ const { DataTypes, Model, Sequelize } = require("sequelize");
 module.exports = (sequelize) => {
 	class Location extends Model {
 		static associate(models) {
-			models.Location.hasMany(models.Route, { as: "departureId" });
-			models.Location.hasMany(models.Route, { as: "destinationId" });
 			// define association here
 		}
 	}
