@@ -1,6 +1,15 @@
 const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const port = 3000;
+const port = process.env.PORT;
+console.log("port is ", port);
+
+//sequelize
+const db = require("../models/index.js");
+db.sequelize.sync();
+
+console.log(process.env.DB_PASSWORD);
 
 const app = express();
 
