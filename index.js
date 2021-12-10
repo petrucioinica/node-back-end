@@ -1,47 +1,19 @@
-"use strict";
+const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const fs = require("fs");
-const path = require("path");
-const Sequelize = require("sequelize");
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "development";
-const config = require(__dirname + "/../config/config.js");
-console.log("config is: ", config);
-const db = {};
+const port = process.env.PORT;
 
-let sequelize;
-if (config.use_env_variable) {
-	sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-	sequelize = new Sequelize(
-		config.database,
-		config.username,
-		config.password,
-		config
-	);
-}
+//sequelize
+const db = require("./models/index.js");
+db.sequelize.sync({ alter: true });
 
-fs.readdirSync(__dirname)
-	.filter((file) => {
-		return (
-			file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
-		);
-	})
-	.forEach((file) => {
-		const model = require(path.join(__dirname, file))(
-			sequelize,
-			Sequelize.DataTypes
-		);
-		db[model.name] = model;
-	});
+const app = express();
 
-Object.keys(db).forEach((modelName) => {
-	if (db[modelName].associate) {
-		db[modelName].associate(db);
-	}
+app.listen(port, () => {
+	console.log("App started, hello world!");
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
-
-module.exports = db;
+app.get("/", (req, res) => {
+	res.send("Hello!");
+});
