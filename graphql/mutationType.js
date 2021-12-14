@@ -37,7 +37,7 @@ const mutationType = new GraphQLObjectType({
 			type: userType,
 			args: {
 				createUserInput: {
-					type: createUserInputType,
+					type: new GraphQLNonNull(createUserInputType),
 				},
 			},
 			resolve: async (source, args) => {
@@ -57,7 +57,7 @@ const mutationType = new GraphQLObjectType({
 			type: loginResultType,
 			args: {
 				loginInput: {
-					type: loginInputType,
+					type: new GraphQLNonNull(loginInputType),
 				},
 			},
 			resolve: (source, args) => {
@@ -75,7 +75,7 @@ const mutationType = new GraphQLObjectType({
 			type: createLocationResultType,
 			args: {
 				locationInput: {
-					type: createLocationInputType,
+					type: new GraphQLNonNull(createLocationInputType),
 				},
 			},
 			resolve: async (source, args) => {
@@ -87,7 +87,7 @@ const mutationType = new GraphQLObjectType({
 			type: deleteLocationResultType,
 			args: {
 				deleteLocationInput: {
-					type: deleteLocationInputType,
+					type: new GraphQLNonNull(deleteLocationInputType),
 				},
 			},
 			resolve: async (source, args) => {
@@ -100,7 +100,7 @@ const mutationType = new GraphQLObjectType({
 			type: companyType,
 			args: {
 				createCompanyInput: {
-					type: createCompanyInputType,
+					type: new GraphQLNonNull(createCompanyInputType),
 				},
 			},
 			resolve: async (source, args) => {
@@ -111,7 +111,7 @@ const mutationType = new GraphQLObjectType({
 			type: deleteCompanyType,
 			args: {
 				deleteCompanyInput: {
-					type: deleteCompanyInputType,
+					type: new GraphQLNonNull(deleteCompanyInputType),
 				},
 			},
 			resolve: async (source, args) => {
@@ -122,7 +122,7 @@ const mutationType = new GraphQLObjectType({
 			type: routeType,
 			args: {
 				createRouteInput: {
-					type: createRouteInputType,
+					type: new GraphQLNonNull(createRouteInputType),
 				},
 			},
 			resolve: async (source, args) => {
@@ -133,7 +133,7 @@ const mutationType = new GraphQLObjectType({
 			type: deleteRouteResultType,
 			args: {
 				deleteRouteInput: {
-					type: deleteRouteInputType,
+					type: new GraphQLNonNull(deleteRouteInputType),
 				},
 			},
 			resolve: (source, args) => {
@@ -144,7 +144,7 @@ const mutationType = new GraphQLObjectType({
 			type: reviewType,
 			args: {
 				createReviewInput: {
-					type: createReviewInputType,
+					type: new GraphQLNonNull(createReviewInputType),
 				},
 			},
 			resolve: (source, args) => {
