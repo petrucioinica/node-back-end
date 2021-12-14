@@ -7,7 +7,6 @@ const port = process.env.PORT;
 
 //sequelize
 const db = require("./models/index.js");
-db.sequelize.sync({ alter: true });
 
 const authorizationMiddleware = require("./middlewares/authorization");
 
