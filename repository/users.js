@@ -65,5 +65,23 @@ module.exports.updateUser = async (args, context) => {
 	}
 };
 
-// Nothing
-module.exports.deleteUser = (req, res) => {};
+module.exports.deleteLocation = async (args) => {
+	const { id } = args;
+	try {
+		const userToDelete = await db.User.findOne({
+			where: {
+				id,
+			},
+		});
+		if (userToDelete == null) {
+			return {
+				status: "no location with said id",
+			};
+		}
+		userToDelete.destroy();
+		return { status: "success" };
+	} catch (err) {
+		console.error(err);
+		return null;
+	}
+};

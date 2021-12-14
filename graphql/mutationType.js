@@ -36,12 +36,21 @@ const mutationType = new GraphQLObjectType({
 		createUser: {
 			type: userType,
 			args: {
-				createUserInput: {
+				id: {
 					type: createUserInputType,
 				},
 			},
 			resolve: async (source, args) => {
 				return createUser(args.createUserInput);
+			},
+		},
+		deleteUser: {
+			type: deleteLocationResultType,
+			args: {
+				id: { type: new GraphQLNonNull(GraphQLID) },
+			},
+			resolve: async (source, args) => {
+				return deleteUser(args);
 			},
 		},
 		login: {
