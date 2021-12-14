@@ -5,6 +5,9 @@ const { createUser } = require("../repository/users");
 const loginInputType = require("./inputTypes/loginInputType");
 const loginHandler = require("../repository/login");
 const loginResultType = require("./types/loginResultType");
+const createLocationResultType = require("./types/createLocationResultType");
+const createLocationInputType = require("./inputTypes/createLocationInputType");
+const { createLocation } = require("../repository/locations");
 
 const mutationType = new GraphQLObjectType({
 	name: "Mutation",
@@ -35,6 +38,18 @@ const mutationType = new GraphQLObjectType({
 				return {
 					token,
 				};
+			},
+		},
+		createLocation: {
+			type: createLocationResultType,
+			args: {
+				locationInput: {
+					type: createLocationInputType,
+				},
+			},
+			resolve: async (source, args) => {
+				const { address } = args.locationInput;
+				return createLocation(address);
 			},
 		},
 	},
