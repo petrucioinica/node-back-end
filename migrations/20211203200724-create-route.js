@@ -8,6 +8,36 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      destinationId:{
+				type: Sequelize.INTEGER,
+				references:{
+					model:{
+						tableName:"Locations"
+					},
+					key:'id',
+					onDelete: "cascade"
+				}
+			},
+			departureId:{
+				type: Sequelize.INTEGER,
+				references:{
+					model:{
+						tableName:"Locations"
+					},
+					key:'id',
+					onDelete: "cascade"
+				}
+			},
+			companyId:{
+				type: Sequelize.INTEGER,
+				references:{
+					model:{
+						tableName:"Companies"
+					},
+					key:'id',
+					onDelete: "cascade"
+				}
+			},
       wayOfTransport: {
         allowNull: false,
         type: Sequelize.STRING

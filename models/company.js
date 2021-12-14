@@ -4,7 +4,7 @@ module.exports = (sequelize) => {
 	class Company extends Model {
 		static associate(models) {
 			Company.hasMany(models.Route, { foreignKey: "companyId" });
-		}
+		}	
 	}
 
 	Company.init(
