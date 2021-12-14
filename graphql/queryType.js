@@ -11,6 +11,8 @@ const { locationType } = require("./types/locationTypes");
 const { getAllLocations, getLocation } = require("../repository/locations");
 const { companyType } = require("./types/companyType");
 const { getAllCompanies, getCompany } = require("../repository/companies");
+const { routeType } = require("./types/routeTypes");
+const { getAllRoutes, getRoute } = require("../repository/routes");
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
@@ -66,6 +68,21 @@ const queryType = new GraphQLObjectType({
 			},
 			resolve: async (source, { id }) => {
 				return getCompany(id);
+			},
+		},
+		routes: {
+			type: new GraphQLList(routeType),
+			resolve: async () => {
+				return getAllRoutes();
+			},
+		},
+		route: {
+			type: routeType,
+			args: {
+				id: { type: new GraphQLNonNull(GraphQLID) },
+			},
+			resolve: async (source, { id }) => {
+				return getRoute(id);
 			},
 		},
 	},

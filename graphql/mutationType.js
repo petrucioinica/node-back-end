@@ -20,7 +20,13 @@ const {
 	createCompanyInputType,
 	deleteCompanyInputType,
 } = require("./inputTypes/companyInputTypes");
+const { routeType, deleteRouteResultType } = require("./types/routeTypes");
 
+const {
+	createRouteInputType,
+	deleteRouteInputType,
+} = require("./inputTypes/routeInputTypes");
+const { createRoute, deleteRoute } = require("../repository/routes");
 const mutationType = new GraphQLObjectType({
 	name: "Mutation",
 	fields: {
@@ -98,6 +104,28 @@ const mutationType = new GraphQLObjectType({
 			},
 			resolve: async (source, args) => {
 				return deleteCompany(args.deleteCompanyInput.id);
+			},
+		},
+		createRoute: {
+			type: routeType,
+			args: {
+				createRouteInput: {
+					type: createRouteInputType,
+				},
+			},
+			resolve: async (source, args) => {
+				return createRoute(args.createRouteInput);
+			},
+		},
+		deleteRoute: {
+			type: deleteRouteResultType,
+			args: {
+				deleteRouteInput: {
+					type: deleteRouteInputType,
+				},
+			},
+			resolve: async (source, args) => {
+				return deleteRoute(args.deleteRouteInput.id);
 			},
 		},
 	},
