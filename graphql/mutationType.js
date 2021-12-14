@@ -14,6 +14,12 @@ const {
 	deleteLocationInputType,
 } = require("./inputTypes/locationInputTypes");
 const { createLocation, deleteLocation } = require("../repository/locations");
+const { companyType, deleteCompanyType } = require("./types/companyType");
+const { deleteCompany, createCompany } = require("../repository/companies");
+const {
+	createCompanyInputType,
+	deleteCompanyInputType,
+} = require("./inputTypes/companyInputTypes");
 
 const mutationType = new GraphQLObjectType({
 	name: "Mutation",
@@ -46,7 +52,7 @@ const mutationType = new GraphQLObjectType({
 				};
 			},
 		},
-		//location CRUD
+		//location
 		createLocation: {
 			type: createLocationResultType,
 			args: {
@@ -68,6 +74,30 @@ const mutationType = new GraphQLObjectType({
 			},
 			resolve: async (source, args) => {
 				return deleteLocation(args.deleteLocationInput);
+			},
+		},
+
+		//company
+		createCompany: {
+			type: companyType,
+			args: {
+				createCompanyInput: {
+					type: createCompanyInputType,
+				},
+			},
+			resolve: async (source, args) => {
+				return createCompany(args.createCompanyInput);
+			},
+		},
+		deleteCompany: {
+			type: deleteCompanyType,
+			args: {
+				deleteCompanyInput: {
+					type: deleteCompanyInputType,
+				},
+			},
+			resolve: async (source, args) => {
+				return deleteCompany(args.deleteCompanyInput.id);
 			},
 		},
 	},
