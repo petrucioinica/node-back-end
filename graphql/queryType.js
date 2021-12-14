@@ -7,6 +7,8 @@ const {
 
 const userType = require("./types/userType");
 const { getAllUsers, getUserById } = require("../repository/users");
+const { locationType } = require("./types/locationTypes");
+const { getAllLocations, getLocation } = require("../repository/locations");
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
@@ -26,6 +28,24 @@ const queryType = new GraphQLObjectType({
 			},
 			resolve: async (source, { id }, context) => {
 				return getUserById(id);
+			},
+		},
+		//locations
+		locations: {
+			type: new GraphQLList(locationType),
+			resolve: async () => {
+				return await getAllLocations();
+			},
+		},
+		location: {
+			type: locationType,
+			args: {
+				id: {
+					type: new GraphQLNonNull(GraphQLID),
+				},
+			},
+			resolve: async (source, { id }) => {
+				return getLocation(id);
 			},
 		},
 	},

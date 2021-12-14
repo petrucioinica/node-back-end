@@ -5,9 +5,15 @@ const { createUser } = require("../repository/users");
 const loginInputType = require("./inputTypes/loginInputType");
 const loginHandler = require("../repository/login");
 const loginResultType = require("./types/loginResultType");
-const createLocationResultType = require("./types/createLocationResultType");
-const createLocationInputType = require("./inputTypes/createLocationInputType");
-const { createLocation } = require("../repository/locations");
+const {
+	createLocationResultType,
+	deleteLocationResultType,
+} = require("./types/locationTypes");
+const {
+	createLocationInputType,
+	deleteLocationInputType,
+} = require("./inputTypes/locationInputTypes");
+const { createLocation, deleteLocation } = require("../repository/locations");
 
 const mutationType = new GraphQLObjectType({
 	name: "Mutation",
@@ -40,6 +46,7 @@ const mutationType = new GraphQLObjectType({
 				};
 			},
 		},
+		//location CRUD
 		createLocation: {
 			type: createLocationResultType,
 			args: {
@@ -50,6 +57,17 @@ const mutationType = new GraphQLObjectType({
 			resolve: async (source, args) => {
 				const { address } = args.locationInput;
 				return createLocation(address);
+			},
+		},
+		deleteLocation: {
+			type: deleteLocationResultType,
+			args: {
+				deleteLocationInput: {
+					type: deleteLocationInputType,
+				},
+			},
+			resolve: async (source, args) => {
+				return deleteLocation(args.deleteLocationInput);
 			},
 		},
 	},
