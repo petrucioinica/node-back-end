@@ -1,4 +1,5 @@
 const express = require("express");
+const { graphqlHTTP } = require("express-graphql");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -8,12 +9,20 @@ const port = process.env.PORT;
 const db = require("./models/index.js");
 db.sequelize.sync({ alter: true });
 
+const authorizationMiddleware = require("./middlewares/authorization");
+
+const schema = require("./graphql");
+
 const app = express();
 
-app.listen(port, () => {
-	console.log("App started, hello world!");
-});
+app.use(
+	"/graphql",
+	authorizationMiddleware,
+	graphqlHTTP({
+		schema,
+	})
+);
 
-app.get("/", (req, res) => {
-	res.send("Hello!");
+app.listen(port, () => {
+	console.log(`Server started on port ${port}`);
 });
