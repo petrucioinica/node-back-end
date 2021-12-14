@@ -1,4 +1,5 @@
 const db = require("../models");
+const crypto = require("crypto");
 
 module.exports.getAllUsers = async () => {
 	try {
@@ -15,7 +16,12 @@ module.exports.getUserById = async (id) => {
 };
 
 module.exports.createUser = async (args) => {
-	const { email, password, name } = args;
+	const { email, name } = args;
+
+	const password = crypto
+		.createHash("sha256")
+		.update(args.password)
+		.digest("hex");
 	try {
 		const newUser = await db.User.create({
 			email,

@@ -1,4 +1,3 @@
-const { address } = require("faker");
 const db = require("../models");
 
 module.exports.createCompany = async (args) => {

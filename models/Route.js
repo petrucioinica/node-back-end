@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
 			Route.belongsTo(models.Company, { foreignKey: "companyId" });
 			Route.belongsToMany(models.User, {
 				through: models.Review,
-				foreignKey: "reviewId",
+				foreignKey: "routeId",
 			});
 		}
 	}

@@ -1,4 +1,3 @@
-const { route } = require("express/lib/application");
 const db = require("../models");
 
 module.exports.createRoute = async (args) => {
@@ -17,7 +16,10 @@ module.exports.createRoute = async (args) => {
 			where: { id: args.departure },
 		});
 		const company = await db.Company.findOne({ where: { id: args.company } });
-
+		if (!destination || !departure || !company) {
+			await newRoute.destroy();
+			throw "invalid id for route nested objects";
+		}
 		return {
 			wayOfTransport: newRoute.dataValues.wayOfTransport,
 			id: newRoute.dataValues.id,

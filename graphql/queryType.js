@@ -9,18 +9,20 @@ const userType = require("./types/userType");
 const { getAllUsers, getUserById } = require("../repository/users");
 const { locationType } = require("./types/locationTypes");
 const { getAllLocations, getLocation } = require("../repository/locations");
-const { companyType } = require("./types/companyType");
+const { companyType } = require("./types/companyTypes");
 const { getAllCompanies, getCompany } = require("../repository/companies");
 const { routeType } = require("./types/routeTypes");
 const { getAllRoutes, getRoute } = require("../repository/routes");
+const { reviewType } = require("./types/reviewTypes");
+const { getAllReviews, getReview } = require("../repository/reviews");
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
 	fields: {
 		users: {
 			type: new GraphQLList(userType),
-			resolve: async () => {
-				return await getAllUsers();
+			resolve: () => {
+				return getAllUsers();
 			},
 		},
 		user: {
@@ -30,15 +32,15 @@ const queryType = new GraphQLObjectType({
 					type: new GraphQLNonNull(GraphQLID),
 				},
 			},
-			resolve: async (source, { id }, context) => {
+			resolve: (source, { id }, context) => {
 				return getUserById(id);
 			},
 		},
 		//locations
 		locations: {
 			type: new GraphQLList(locationType),
-			resolve: async () => {
-				return await getAllLocations();
+			resolve: () => {
+				return getAllLocations();
 			},
 		},
 		location: {
@@ -48,15 +50,15 @@ const queryType = new GraphQLObjectType({
 					type: new GraphQLNonNull(GraphQLID),
 				},
 			},
-			resolve: async (source, { id }) => {
+			resolve: (source, { id }) => {
 				return getLocation(id);
 			},
 		},
 		//companies
 		companies: {
 			type: new GraphQLList(companyType),
-			resolve: async () => {
-				return await getAllCompanies();
+			resolve: () => {
+				return getAllCompanies();
 			},
 		},
 		company: {
@@ -66,13 +68,13 @@ const queryType = new GraphQLObjectType({
 					type: new GraphQLNonNull(GraphQLID),
 				},
 			},
-			resolve: async (source, { id }) => {
+			resolve: (source, { id }) => {
 				return getCompany(id);
 			},
 		},
 		routes: {
 			type: new GraphQLList(routeType),
-			resolve: async () => {
+			resolve: () => {
 				return getAllRoutes();
 			},
 		},
@@ -81,8 +83,23 @@ const queryType = new GraphQLObjectType({
 			args: {
 				id: { type: new GraphQLNonNull(GraphQLID) },
 			},
-			resolve: async (source, { id }) => {
+			resolve: (source, { id }) => {
 				return getRoute(id);
+			},
+		},
+		reviews: {
+			type: new GraphQLList(reviewType),
+			resolve: () => {
+				return getAllReviews();
+			},
+		},
+		review: {
+			type: reviewType,
+			args: {
+				id: { type: new GraphQLNonNull(GraphQLID) },
+			},
+			resolve: (source, { id }) => {
+				return getReview(id);
 			},
 		},
 	},

@@ -1,5 +1,5 @@
 const { GraphQLObjectType, GraphQLString, GraphQLID } = require("graphql");
-const { companyType } = require("./companyType");
+const { companyType } = require("./companyTypes");
 const { locationType } = require("./locationTypes");
 const transportEnum = require("./transportEnum");
 
