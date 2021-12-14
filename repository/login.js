@@ -1,12 +1,17 @@
 const jwt = require("jsonwebtoken");
 const { KEY } = require("../config/jwt");
 const db = require("../models");
+const crypto = require("crypto");
 
 const loginHandler = async (email, password) => {
+	const hashedPassword = crypto
+		.createHash("sha256")
+		.update(password)
+		.digest("hex");
 	const user = await db.User.findOne({
 		where: {
 			email,
-			password,
+			password: hashedPassword,
 		},
 	});
 

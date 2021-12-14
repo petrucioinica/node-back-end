@@ -1,4 +1,4 @@
-const { GraphQLObjectType } = require("graphql");
+const { GraphQLObjectType, GraphQLNonNull, GraphQLID } = require("graphql");
 const createUserInputType = require("./inputTypes/createUserInputType");
 const userType = require("./types/userType");
 const { createUser } = require("../repository/users");
@@ -36,7 +36,7 @@ const mutationType = new GraphQLObjectType({
 		createUser: {
 			type: userType,
 			args: {
-				id: {
+				createUserInput: {
 					type: createUserInputType,
 				},
 			},
