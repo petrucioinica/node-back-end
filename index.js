@@ -17,7 +17,7 @@ const app = express();
 
 app.use(
 	"/graphql",
-	// authorizationMiddleware,
+	authorizationMiddleware,
 	graphqlHTTP({
 		schema,
 	})
