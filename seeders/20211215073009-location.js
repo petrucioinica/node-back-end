@@ -18,13 +18,13 @@ module.exports = {
 			});
 		}
 		await queryInterface.bulkInsert("Locations", data_to_push, {});
-		await fs.writeFile(
-			"seeders/locationIds.json",
-			JSON.stringify(locationIds),
-			(err) => {
-				console.error(err);
-			}
-		);
+		// await fs.writeFile(
+		// 	"seeders/locationIds.json",
+		// 	JSON.stringify(locationIds),
+		// 	(err) => {
+		// 		console.error(err);
+		// 	}
+		// );
 	},
 
 	down: async (queryInterface, Sequelize) => {
@@ -35,7 +35,8 @@ module.exports = {
 		 * await queryInterface.bulkDelete('People', null, {});
 		 */
 
-		await db.sequelize.query("SET FOREIGN_KEY_CHECKS = 0", { raw: true });
+		await db.sequelize.query("SET SQL_SAFE_UPDATES=0");
 		await queryInterface.bulkDelete("Locations", null, {});
+
 	},
 };

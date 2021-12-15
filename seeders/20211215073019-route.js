@@ -12,9 +12,19 @@ module.exports = {
 		const types_of_transport = ["Tram", "Bus", "Trolley", "Metro"];
 		const length_of_types_of_transport = types_of_transport.length;
 
-		const locationIds = require("./locationIds.json");
-		const companyIds = require("./companyIds.json");
+		const allLocations = await db.Location.findAll();
+		const allCompanies = await db.Company.findAll();
 
+		const locationIds = []
+		const companyIds = []
+
+		for (var elem in allLocations)
+			locationIds.push(allLocations[elem].id)
+		
+		for (var elem in allCompanies)
+			companyIds.push(allCompanies[elem].id)
+		
+		
 		const routeIds = [];
 		const data_to_push = [];
 		for (let it = 0; it < 100; ++it) {
@@ -52,13 +62,13 @@ module.exports = {
 			});
 		}
 		await queryInterface.bulkInsert("Routes", data_to_push, {});
-		await fs.writeFile(
-			"seeders/routeIds.json",
-			JSON.stringify(routeIds),
-			(err) => {
-				console.error(err);
-			}
-		);
+		// await fs.writeFile(
+		// 	"seeders/routeIds.json",
+		// 	JSON.stringify(routeIds),
+		// 	(err) => {
+		// 		console.error(err);
+		// 	}
+		// );
 	},
 
 	down: async (queryInterface, Sequelize) => {
@@ -68,10 +78,9 @@ module.exports = {
 		 * Example:
 		 * await queryInterface.bulkDelete('People', null, {});
 		 */
-		db.sequelize
-			.query("SET FOREIGN_KEY_CHECKS = 0", null, { raw: true })
-			.then(async function (results) {
-				await queryInterface.bulkDelete("Routes", null, {});
-			});
+		
+		await db.sequelize.query("SET SQL_SAFE_UPDATES=0");		
+		await queryInterface.bulkDelete("Routes", null, {});
+		
 	},
 };

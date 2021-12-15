@@ -18,13 +18,13 @@ module.exports = {
 			companyIds.push(id);
 		}
 		await queryInterface.bulkInsert("Companies", data_to_push, {});
-		await fs.writeFile(
-			"seeders/companyIds.json",
-			JSON.stringify(companyIds),
-			(err) => {
-				console.error(err);
-			}
-		);
+		// await fs.writeFile(
+		// 	"seeders/companyIds.json",
+		// 	JSON.stringify(companyIds),
+		// 	(err) => {
+		// 		console.error(err);
+		// 	}
+		// );
 	},
 
 	down: async (queryInterface, Sequelize) => {
@@ -34,6 +34,9 @@ module.exports = {
 		 * Example:
 		 * await queryInterface.bulkDelete('People', null, {});
 		 */
+		
+		await db.sequelize.query("SET SQL_SAFE_UPDATES=0");
 		await queryInterface.bulkDelete("Companies", null, {});
+
 	},
 };

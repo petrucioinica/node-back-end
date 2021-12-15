@@ -4,8 +4,17 @@ const db = require("../models");
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		const routeIds = require("./routeIds.json");
-		const userIds = require("./userIds.json");
+		const allRoutes = await db.Route.findAll();
+		const allUsers = await db.User.findAll();
+
+		const routeIds = []
+		const userIds = []
+
+		for (var elem in allRoutes)
+				routeIds.push(allRoutes[elem].id)
+		
+		for (var elem in allUsers)
+			userIds.push(allUsers[elem].id)
 
 		const data_to_push = [];
 		for (let it = 0; it < 100; ++it) {
@@ -44,7 +53,8 @@ module.exports = {
 		 * await queryInterface.bulkDelete('People', null, {});
 		 */
 
-		await db.sequelize.query("SET FOREIGN_KEY_CHECKS = 0", { raw: true });
+		await db.sequelize.query("SET SQL_SAFE_UPDATES=0");
 		await queryInterface.bulkDelete("Reviews", null, {});
+		
 	},
 };
