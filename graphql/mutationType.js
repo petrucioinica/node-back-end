@@ -1,7 +1,7 @@
 const { GraphQLObjectType, GraphQLNonNull, GraphQLID } = require("graphql");
 const createUserInputType = require("./inputTypes/createUserInputType");
 const userType = require("./types/userType");
-const { createUser } = require("../repository/users");
+const { createUser, updateUser } = require("../repository/users");
 const loginInputType = require("./inputTypes/loginInputType");
 const loginHandler = require("../repository/login");
 const loginResultType = require("./types/loginResultType");
@@ -30,6 +30,7 @@ const { createRoute, deleteRoute } = require("../repository/routes");
 const { reviewType } = require("./types/reviewTypes");
 const { createReviewInputType } = require("./inputTypes/reviewInputTypes");
 const { createReview } = require("../repository/reviews");
+const updateUserInputType = require("./inputTypes/updateUserInputType");
 const mutationType = new GraphQLObjectType({
 	name: "Mutation",
 	fields: {
@@ -149,6 +150,15 @@ const mutationType = new GraphQLObjectType({
 			},
 			resolve: (source, args) => {
 				return createReview(args.createReviewInput);
+			},
+		},
+		updateUser: {
+			type: userType,
+			args: {
+				updateUserInput: { type: updateUserInputType },
+			},
+			resolve: async (source, args, context) => {
+				return updateUser(args.updateUserInput, context);
 			},
 		},
 	},
