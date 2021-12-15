@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serial-seed": "npx sequelize-cli db:seed --seed 20211215072941-user.js"
   },
   "author": "",
   "dependencies": {
