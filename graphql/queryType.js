@@ -12,9 +12,9 @@ const { getAllLocations, getLocation } = require("../repository/locations");
 const { companyType } = require("./types/companyTypes");
 const { getAllCompanies, getCompany } = require("../repository/companies");
 const { routeType } = require("./types/routeTypes");
-const { getAllRoutes, getRoute } = require("../repository/routes");
+const { getAllRoutes, getRoute, getAllCompanysRoutes } = require("../repository/routes");
 const { reviewType } = require("./types/reviewTypes");
-const { getAllReviews, getReview } = require("../repository/reviews");
+const { getAllReviewsForCompany, getAllReviewsByUser, getAllReviews, getReview } = require("../repository/reviews");
 
 const queryType = new GraphQLObjectType({
 	name: "Query",
@@ -72,6 +72,18 @@ const queryType = new GraphQLObjectType({
 				return getCompany(id);
 			},
 		},
+		// routes
+		companyRoutes:{
+			type : new GraphQLList(routeType),
+			args:{
+				companyId:{
+					type: new GraphQLNonNull(GraphQLID),
+				},
+			},
+			resolve: (source, {companyId}) => {
+				return getAllCompanysRoutes(companyId)
+			}
+		},
 		routes: {
 			type: new GraphQLList(routeType),
 			resolve: (source, args, context) => {
@@ -86,6 +98,24 @@ const queryType = new GraphQLObjectType({
 			resolve: (source, { id }) => {
 				return getRoute(id);
 			},
+		},
+		reviewsByUser:{
+			type : new GraphQLList(reviewType),
+			args:{
+				userId: {type : new GraphQLNonNull(GraphQLID)}, 
+			}, 
+			resolve: (source, {userId}) =>{
+				return getAllReviewsByUser(userId)
+			}
+		},
+		reviewsForCompany:{
+			type : new GraphQLList(reviewType),
+			args :{
+				companyId : {type : new GraphQLNonNull(GraphQLID)},
+			},
+			resolve: (source, {companyId}) => {
+				return getAllReviewsForCompany(companyId)
+			}
 		},
 		reviews: {
 			type: new GraphQLList(reviewType),
