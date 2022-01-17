@@ -1,5 +1,92 @@
 const db = require("../models");
 
+async function getAllReviewsAttributes(reviews){
+	const reviewsArr = []
+	for (let review of reviews) {
+		try{
+			const route = await db.Route.findOne({
+				where: { id: review.dataValues.routeId },
+			});
+
+			const destination = await db.Location.findOne({
+				where: { id: route.dataValues.destinationId },
+			});
+			const departure = await db.Location.findOne({
+				where: { id: route.dataValues.departureId },
+			});
+			const company = await db.Company.findOne({
+				where: { id: route.dataValues.companyId },
+			});
+
+			const hydratedRoute = {
+				wayOfTransport: route.dataValues.wayOfTransport,
+				id: route.dataValues.id,
+				destination,
+				departure,
+				company,
+			};
+
+			const user = await db.User.findOne({
+				where: { id: review.dataValues.userId },
+			});
+
+			reviewsArr.push({
+				id: review.dataValues.id,
+				departureTime: review.dataValues.departureTime,
+				arrivalTime: review.dataValues.arrivalTime,
+				comfortRating: review.dataValues.comfortRating,
+				trafficRating: review.dataValues.trafficRating,
+				generalRating: review.dataValues.generalRating,
+				notes: review.dataValues.notes,
+				route: hydratedRoute,
+				user: user.dataValues,
+			});
+		}
+		catch(err){
+			console.error(err)
+		}
+	}
+
+	return reviewsArr
+} 
+
+module.exports.getAllReviewsForCompany = async (companyId) => {
+	try{
+		const allReviews = await db.Review.findAll()
+		const filteredReviews = []
+
+		for (let review of allReviews){
+			const route = await db.Route.findOne({
+				where: { id: review.dataValues.routeId,
+						 companyId : companyId },
+			});
+			if (route !== null){
+				filteredReviews.push(review)
+			}
+		}
+		const reviewsArr = await getAllReviewsAttributes(filteredReviews);
+
+		return reviewsArr	
+	}
+	catch(err){
+		console.error(err)
+		return null;
+	}
+}
+
+module.exports.getAllReviewsByUser = async (userId) => {
+	try { 
+		const reviews = await db.Review.findAll({ where: { userId: userId }})
+		const reviewsArr = await getAllReviewsAttributes(reviews)
+		
+		return reviewsArr;
+	}
+	catch(err){
+		console.error(err)
+		return null
+	}
+} 
+
 module.exports.createReview = async (args) => {
 	try {
 		const review = await db.Review.create({
@@ -80,47 +167,9 @@ module.exports.deleteReview = async (args) => {
 
 module.exports.getAllReviews = async () => {
 	try {
-		const reviewsArr = [];
 		const reviews = await db.Review.findAll();
-		for (let review of reviews) {
-			const route = await db.Route.findOne({
-				where: { id: review.dataValues.routeId },
-			});
+		const reviewsArr = await getAllReviewsAttributes(reviews)
 
-			const destination = await db.Location.findOne({
-				where: { id: route.dataValues.destinationId },
-			});
-			const departure = await db.Location.findOne({
-				where: { id: route.dataValues.departureId },
-			});
-			const company = await db.Company.findOne({
-				where: { id: route.dataValues.companyId },
-			});
-
-			const hydratedRoute = {
-				wayOfTransport: route.dataValues.wayOfTransport,
-				id: route.dataValues.id,
-				destination,
-				departure,
-				company,
-			};
-
-			const user = await db.User.findOne({
-				where: { id: review.dataValues.userId },
-			});
-
-			reviewsArr.push({
-				id: review.dataValues.id,
-				departureTime: review.dataValues.departureTime,
-				arrivalTime: review.dataValues.arrivalTime,
-				comfortRating: review.dataValues.comfortRating,
-				trafficRating: review.dataValues.trafficRating,
-				generalRating: review.dataValues.generalRating,
-				notes: review.dataValues.notes,
-				route: hydratedRoute,
-				user: user.dataValues,
-			});
-		}
 		return reviewsArr;
 	} catch (err) {
 		console.error(err);

@@ -1,5 +1,44 @@
 const db = require("../models");
 
+async function getAllRoutesData(routes){
+	const routesArr = [];
+	if (routes.length) {
+		for (let route of routes) {
+			const departure = await db.Location.findOne({
+				where: { id: route.dataValues.departureId },
+			});
+			const destination = await db.Location.findOne({
+				where: { id: route.dataValues.destinationId },
+			});
+			const company = await db.Company.findOne({
+				where: { id: route.dataValues.companyId },
+			});
+			routesArr.push({
+				wayOfTransport: route.dataValues.wayOfTransport,
+				id: route.dataValues.id,
+				destination: destination.dataValues,
+				departure: departure.dataValues,
+				company: company.dataValues,
+			});
+		}
+	}
+
+	return routesArr
+}
+
+module.exports.getAllCompanysRoutes = async (companyId) =>{
+	try{
+		const routes = await db.Route.findAll({where: {companyId : companyId} })
+		const routesArr = await getAllRoutesData(routes)
+	
+		return routesArr
+	}
+	catch (err){
+		console.error(err)
+		return null
+	}
+}
+
 module.exports.createRoute = async (args) => {
 	try {
 		const newRoute = await db.Route.create({
@@ -56,28 +95,8 @@ module.exports.deleteRoute = async (id) => {
 module.exports.getAllRoutes = async () => {
 	try {
 		const routes = await db.Route.findAll();
-
-		const routesArr = [];
-		if (routes.length) {
-			for (let route of routes) {
-				const departure = await db.Location.findOne({
-					where: { id: route.dataValues.departureId },
-				});
-				const destination = await db.Location.findOne({
-					where: { id: route.dataValues.destinationId },
-				});
-				const company = await db.Company.findOne({
-					where: { id: route.dataValues.companyId },
-				});
-				routesArr.push({
-					wayOfTransport: route.dataValues.wayOfTransport,
-					id: route.dataValues.id,
-					destination: destination.dataValues,
-					departure: departure.dataValues,
-					company: company.dataValues,
-				});
-			}
-		}
+		const routesArr = await getAllRoutesData(routes)
+		
 		return routesArr;
 	} catch (err) {
 		console.error(err);
