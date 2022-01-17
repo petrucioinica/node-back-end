@@ -79,7 +79,12 @@ const mutationType = new GraphQLObjectType({
 					type: new GraphQLNonNull(createLocationInputType),
 				},
 			},
-			resolve: async (source, args) => {
+			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				const { address } = args.locationInput;
 				return createLocation(address);
 			},
@@ -91,7 +96,12 @@ const mutationType = new GraphQLObjectType({
 					type: new GraphQLNonNull(deleteLocationInputType),
 				},
 			},
-			resolve: async (source, args) => {
+			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				return deleteLocation(args.deleteLocationInput);
 			},
 		},
@@ -104,7 +114,12 @@ const mutationType = new GraphQLObjectType({
 					type: new GraphQLNonNull(createCompanyInputType),
 				},
 			},
-			resolve: async (source, args) => {
+			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				return createCompany(args.createCompanyInput);
 			},
 		},
@@ -115,7 +130,12 @@ const mutationType = new GraphQLObjectType({
 					type: new GraphQLNonNull(deleteCompanyInputType),
 				},
 			},
-			resolve: async (source, args) => {
+			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				return deleteCompany(args.deleteCompanyInput.id);
 			},
 		},
@@ -126,7 +146,12 @@ const mutationType = new GraphQLObjectType({
 					type: new GraphQLNonNull(createRouteInputType),
 				},
 			},
-			resolve: async (source, args) => {
+			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				return createRoute(args.createRouteInput);
 			},
 		},
@@ -137,7 +162,12 @@ const mutationType = new GraphQLObjectType({
 					type: new GraphQLNonNull(deleteRouteInputType),
 				},
 			},
-			resolve: (source, args) => {
+			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				return deleteRoute(args.deleteRouteInput.id);
 			},
 		},
@@ -148,7 +178,12 @@ const mutationType = new GraphQLObjectType({
 					type: new GraphQLNonNull(createReviewInputType),
 				},
 			},
-			resolve: (source, args) => {
+			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				return createReview(args.createReviewInput);
 			},
 		},
@@ -158,6 +193,11 @@ const mutationType = new GraphQLObjectType({
 				updateUserInput: { type: updateUserInputType },
 			},
 			resolve: async (source, args, context) => {
+				const userId = context.user?.id;
+
+				if (!userId) {
+					return null;
+				}
 				return updateUser(args.updateUserInput, context);
 			},
 		},

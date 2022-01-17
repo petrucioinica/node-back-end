@@ -74,7 +74,7 @@ const queryType = new GraphQLObjectType({
 		},
 		routes: {
 			type: new GraphQLList(routeType),
-			resolve: () => {
+			resolve: (source, args, context) => {
 				return getAllRoutes();
 			},
 		},

@@ -3,7 +3,6 @@ const { KEY } = require("../config/jwt");
 const db = require("../models");
 
 const authorizationMiddleware = async (req, res, next) => {
-	console.log(" key is ", KEY);
 	const authorization = req.headers.authorization;
 	if (authorization) {
 		try {
@@ -17,9 +16,6 @@ const authorizationMiddleware = async (req, res, next) => {
 			}
 		} catch (e) {
 			console.error("error", e);
-			res.status(401).json({
-				error: "Invalid access token!",
-			});
 		}
 	} else {
 		next();
