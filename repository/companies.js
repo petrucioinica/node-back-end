@@ -1,5 +1,35 @@
 const db = require("../models");
 
+module.exports.getCompanyRating = async (id) => {
+	try{
+		console.log(id)
+		const reviews = await db.Review.findAll()
+
+		var totalReviews = 0
+		var generalTotal = 0.0
+		var comfortTotal = 0.0 
+
+		for (let review of reviews){
+			const route = await db.Route.findOne({
+				where: { id: review.dataValues.routeId, companyId : id },
+			});
+
+			if (route !== null){
+				totalReviews += 1 
+				generalTotal += review.dataValues.generalRating
+				comfortTotal += review.dataValues.comfortRating
+			}
+		}
+		if (totalReviews > 0)
+			return generalTotal / totalReviews
+		
+		return 0.0
+	}catch(err){
+		console.error(err)
+		return null
+	}
+}
+
 module.exports.createCompany = async (args) => {
 	const { name } = args;
 	console.log("args are ", args);

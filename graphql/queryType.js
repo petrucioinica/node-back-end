@@ -3,6 +3,7 @@ const {
 	GraphQLList,
 	GraphQLID,
 	GraphQLNonNull,
+	GraphQLFloat,
 } = require("graphql");
 
 const userType = require("./types/userType");
@@ -10,7 +11,7 @@ const { getAllUsers, getUserById } = require("../repository/users");
 const { locationType } = require("./types/locationTypes");
 const { getAllLocations, getLocation } = require("../repository/locations");
 const { companyType } = require("./types/companyTypes");
-const { getAllCompanies, getCompany } = require("../repository/companies");
+const { getAllCompanies, getCompany, getCompanyRating } = require("../repository/companies");
 const { routeType } = require("./types/routeTypes");
 const { getAllRoutes, getRoute, getAllCompanysRoutes } = require("../repository/routes");
 const { reviewType } = require("./types/reviewTypes");
@@ -55,6 +56,17 @@ const queryType = new GraphQLObjectType({
 			},
 		},
 		//companies
+		companyRating:{
+			type : GraphQLFloat,
+			args: {
+				id: {
+					type : new GraphQLNonNull(GraphQLID)
+				} 
+			},
+			resolve : (source, {id}) => {
+				return getCompanyRating(id)
+			}
+		},
 		companies: {
 			type: new GraphQLList(companyType),
 			resolve: () => {
@@ -86,7 +98,7 @@ const queryType = new GraphQLObjectType({
 		},
 		routes: {
 			type: new GraphQLList(routeType),
-			resolve: (source, args, context) => {
+			resolve: () => {
 				return getAllRoutes();
 			},
 		},
