@@ -52,3 +52,23 @@ module.exports.getLocation = async (id) => {
 		return null;
 	}
 };
+
+
+module.exports.updateLocation = async (id, args) => {
+	const { address } = args;
+
+	try {
+		await db.Location.update(
+			{
+				address
+			},
+			{ where: { id } }
+		);
+
+		return await db.Location.findByPk(id);
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
+
+}

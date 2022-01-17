@@ -128,3 +128,25 @@ module.exports.getRoute = async (id) => {
 		return null;
 	}
 };
+
+module.exports.updateRoute = async (id, args) => {
+	const { wayOfTransport, destinationId, departureId, companyId } = args;
+
+	try {
+		await db.Route.update(
+			{
+				wayOfTransport, 
+				destinationId, 
+				departureId, 
+				companyId
+			},
+			{ where: { id } }
+		);
+
+		return await db.Route.findByPk(id);
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
+
+}

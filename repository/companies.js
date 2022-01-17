@@ -83,3 +83,22 @@ module.exports.getCompany = async (id) => {
 		return null;
 	}
 };
+
+module.exports.updateCompany = async (id, args) => {
+	const { name } = args;
+
+	try {
+		await db.Company.update(
+			{
+				name
+			},
+			{ where: { id } }
+		);
+
+		return await db.Company.findByPk(id);
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
+
+}

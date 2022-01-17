@@ -222,3 +222,27 @@ module.exports.getReview = async (id) => {
 		return null;
 	}
 };
+
+
+module.exports.updateReview = async (id, args) => {
+	const { departureTime, arrivalTime, comfortRating, trafficRating, generalRating, notes } = args;
+
+	try {
+		await db.Review.update(
+			{
+				departureTime, 
+				arrivalTime, 
+				comfortRating, 
+				trafficRating, 
+				generalRating, 
+				notes
+			},
+			{ where: { id } }
+		);
+
+		return await db.Review.findByPk(id);
+	} catch (e) {
+		console.error(e);
+		return null;
+	}
+}
