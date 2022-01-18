@@ -1,9 +1,9 @@
 const db = require("../models");
 
-async function getAllReviewsAttributes(reviews){
-	const reviewsArr = []
+async function getAllReviewsAttributes(reviews) {
+	const reviewsArr = [];
 	for (let review of reviews) {
-		try{
+		try {
 			const route = await db.Route.findOne({
 				where: { id: review.dataValues.routeId },
 			});
@@ -41,51 +41,47 @@ async function getAllReviewsAttributes(reviews){
 				route: hydratedRoute,
 				user: user.dataValues,
 			});
-		}
-		catch(err){
-			console.error(err)
+		} catch (err) {
+			console.error(err);
 		}
 	}
 
-	return reviewsArr
-} 
+	return reviewsArr;
+}
 
 module.exports.getAllReviewsForCompany = async (companyId) => {
-	try{
-		const allReviews = await db.Review.findAll()
-		const filteredReviews = []
+	try {
+		const allReviews = await db.Review.findAll();
+		const filteredReviews = [];
 
-		for (let review of allReviews){
+		for (let review of allReviews) {
 			const route = await db.Route.findOne({
-				where: { id: review.dataValues.routeId,
-						 companyId : companyId },
+				where: { id: review.dataValues.routeId, companyId: companyId },
 			});
-			if (route !== null){
-				filteredReviews.push(review)
+			if (route !== null) {
+				filteredReviews.push(review);
 			}
 		}
 		const reviewsArr = await getAllReviewsAttributes(filteredReviews);
 
-		return reviewsArr	
-	}
-	catch(err){
-		console.error(err)
+		return reviewsArr;
+	} catch (err) {
+		console.error(err);
 		return null;
 	}
-}
+};
 
 module.exports.getAllReviewsByUser = async (userId) => {
-	try { 
-		const reviews = await db.Review.findAll({ where: { userId: userId }})
-		const reviewsArr = await getAllReviewsAttributes(reviews)
-		
+	try {
+		const reviews = await db.Review.findAll({ where: { userId: userId } });
+		const reviewsArr = await getAllReviewsAttributes(reviews);
+
 		return reviewsArr;
+	} catch (err) {
+		console.error(err);
+		return null;
 	}
-	catch(err){
-		console.error(err)
-		return null
-	}
-} 
+};
 
 module.exports.createReview = async (args) => {
 	try {
@@ -165,10 +161,14 @@ module.exports.deleteReview = async (args) => {
 	}
 };
 
-module.exports.getAllReviews = async () => {
+module.exports.getAllReviews = async (args) => {
 	try {
-		const reviews = await db.Review.findAll();
-		const reviewsArr = await getAllReviewsAttributes(reviews)
+		let filters = {};
+		if (args?.filters) {
+			filters = args.filters;
+		}
+		const reviews = await db.Review.findAll({ where: { ...filters } });
+		const reviewsArr = await getAllReviewsAttributes(reviews);
 
 		return reviewsArr;
 	} catch (err) {
@@ -223,26 +223,25 @@ module.exports.getReview = async (id) => {
 	}
 };
 
-
 module.exports.updateReview = async (id, args) => {
-	const { departureTime, arrivalTime, comfortRating, trafficRating, generalRating, notes } = args;
-
 	try {
+		console.log("hello===================================");
+		const oldReview = await db.Review.findByPk(args.id);
+		console.log("hello===================================");
+		if (oldReview.dataValues.userId !== id) {
+			return null;
+		}
+		console.log("hello===================================");
 		await db.Review.update(
 			{
-				departureTime, 
-				arrivalTime, 
-				comfortRating, 
-				trafficRating, 
-				generalRating, 
-				notes
+				...args,
 			},
-			{ where: { id } }
+			{ where: { id: args.id } }
 		);
-
-		return await db.Review.findByPk(id);
+		console.log("hello===================================");
+		return await this.getReview(args.id);
 	} catch (e) {
 		console.error(e);
 		return null;
 	}
-}
+};

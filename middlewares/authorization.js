@@ -8,14 +8,17 @@ const authorizationMiddleware = async (req, res, next) => {
 		try {
 			const decoded = jwt.verify(authorization.replace("Bearer ", ""), KEY);
 			const userId = decoded.id;
-
-			const user = await db.User.findByPk(userId);
+			let user = null;
+			if (userId) {
+				user = await db.User.findByPk(userId);
+			}
 			if (user) {
 				req.user = user;
 				next();
 			}
 		} catch (e) {
 			console.error("error", e);
+			next();
 		}
 	} else {
 		next();
