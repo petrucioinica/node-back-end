@@ -6,7 +6,9 @@ const {
 	GraphQLFloat,
 } = require("graphql");
 
-const userType = require("./types/userType");
+const { userType, createUserType} = require("./types/userType");
+console.log(userType)
+console.log(createUserType)
 const { getAllUsers, getUserById } = require("../repository/users");
 const { locationType } = require("./types/locationTypes");
 const { getAllLocations, getLocation } = require("../repository/locations");
